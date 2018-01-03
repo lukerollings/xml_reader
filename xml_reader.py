@@ -15,23 +15,32 @@ tree = ET.parse('AlSiC_monosheet_1_LHS.tif.profile.xml')
 
 root = tree.getroot()
 
-print('x axis position (mm):')  
-print(root[5][0].text)
+#print('x axis position (mm):')  
+#print(root[5][0].text)
+#
+#print('y axis position (mm)')
+#print(root[5][1].text)
+#
+#print('magnification (mm)')
+#print(root[5][2].text)
+#
+#print('rotation (degrees)')
+#print(root[5][3].text)
+#
+#print('tilt (degrees)')
+#print(root[5][4].text)
+#
+#print('imaging (mm)')
+#print(root[5][5].text)
 
-print('y axis position (mm)')
-print(root[5][1].text)
 
-print('magnification (mm)')
-print(root[5][2].text)
+x1 = float(root[5][0].text)
+y1 = float(root[5][1].text)
+mag = float(root[5][2].text)
+rot = float(root[5][3].text)
+tilt = float(root[5][4].text)
+img = float(root[5][5].text)
 
-print('rotation (degrees)')
-print(root[5][3].text)
+print('x axis position (mm)', 'y axis position (mm)', 'magnification (mm)', 'rotation (degrees)', 'tilt (degrees)', 'imaging (mm)') 
 
-print('tilt (degrees)')
-print(root[5][4].text)
-
-print('imaging (mm)')
-print(root[5][5].text)
-
-
-x1 = float(root[5][5].text)
+print ('%-21i%-21i%-19i%-19i%-15i%-13i' % (x1, y1, mag, rot, tilt, img))
