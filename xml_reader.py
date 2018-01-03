@@ -35,13 +35,20 @@ for f in filenames:
     tilt = float(root[5][4].text)
     img = float(root[5][5].text)
 
-    np.xpos.insert(i, x1)
-    np.ypos.insert(i, y1)
+    np.xpos.insert(i, x1+129.504)
+    np.ypos.insert(i, y1-301.876)
     
     i = i+1
 
 
-    print ('%-6i%-21i%-21i%-19i%-19i%-15i%-13i' % (i, x1, y1, mag, rot, tilt, img))
+    print ('%-6i%-21f%-21f%-19i%-19i%-15i%-13i' % (i, x1, y1, mag, rot, tilt, img))
     
-    
-plt.scatter(np.xpos, np.ypos, s=1)
+#convert from mm to pixels (value measured in imageJ)
+px = 117.533 #(pixels/mm)
+
+x = np.multiply(np.xpos, px)
+y = np.multiply(np.ypos, px) 
+
+
+
+plt.scatter(x, y, s=1)
