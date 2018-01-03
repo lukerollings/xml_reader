@@ -13,8 +13,10 @@ import glob
 
 os.chdir('C:\\Users\\mbgnwlr2\\Documents\\PhD_LabStuff\\Rad_Stitch_Practice')
 
+##Analysis of .xml files
 print('image', 'x axis position (mm)', 'y axis position (mm)', 'magnification (mm)', 'rotation (degrees)', 'tilt (degrees)', 'imaging (mm)') 
 
+#Produces a list of files starting with "AlSiC..." and ending in ".xml"
 filenames = sorted(glob.glob('AlSiC_monosheet_*.xml'))
 filenames = filenames[0:10]
 
@@ -23,6 +25,7 @@ np.ypos = [] #list to add y coordiantes
 
 i = 0 #iteration counter
 
+#reading each .xml file in turn and extracting the data
 for f in filenames:
 
     tree = ET.parse(f)
@@ -41,27 +44,33 @@ for f in filenames:
     
     i = i+1
 
-
+    #print all values in list below headers defined above
     print ('%-6i%-21f%-21f%-19i%-19i%-15i%-13i' % (i, x1, y1, mag, rot, tilt, img))
     
 #convert from mm to pixels (value measured in imageJ)
 px = 117.533 #(pixels/mm)
 
+#end with lists of x and y coordinates in units of pixels
 x = np.multiply(np.xpos, px)
 y = np.multiply(np.ypos, px) 
 
+
+##Combination of .tif files
+
+#begin with a blank background to stitch each image to
 background = Image.new('I;16', (40000, 4000))
 
+#Produces a list of files starting with "AlSiC..." and ending in ".tif"
 images = sorted(glob.glob('AlSiC_monosheet_*.tif'))
 images = images[0:10]
 
-i = 9
+ix = 9 #iteration counter for x axis
 
 for f in images:
     im = Image.open(f)
 
-    background.paste(im, (int(round(x[i])), 0))
+    background.paste(im, (int(round(x[ix])), 0)) #lines image up with ix-th coordinate of list x
     
-    i = i-1
+    ix = ix-1
 
-background.save('stitching_attempt_1.tif')
+background.save('stitching_attempt_1.tif') #saves final image as "stitching_attempt_1
