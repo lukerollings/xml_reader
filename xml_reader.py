@@ -6,16 +6,17 @@ Created on Wed Jan  3 12:19:42 2018
 """
 
 import os
-import numpy as np, matplotlib.pyplot as plt
+import numpy as np
+from PIL import Image
 import xml.etree.ElementTree as ET
 import glob
 
-os.chdir('C:\\Users\\mbgnwlr2\\Documents\\PhD_LabStuff\\Radiography_17_12_20')
+os.chdir('C:\\Users\\mbgnwlr2\\Documents\\PhD_LabStuff\\Rad_Stitch_Practice')
 
 print('image', 'x axis position (mm)', 'y axis position (mm)', 'magnification (mm)', 'rotation (degrees)', 'tilt (degrees)', 'imaging (mm)') 
 
 filenames = sorted(glob.glob('AlSiC_monosheet_*.xml'))
-filenames = filenames[0:96]
+filenames = filenames[0:10]
 
 np.xpos = [] #list to add x coordinates
 np.ypos = [] #list to add y coordiantes
@@ -49,6 +50,18 @@ px = 117.533 #(pixels/mm)
 x = np.multiply(np.xpos, px)
 y = np.multiply(np.ypos, px) 
 
+background = Image.new('I;16', (40000, 4000))
 
+images = sorted(glob.glob('AlSiC_monosheet_*.tif'))
+images = images[0:10]
 
-plt.scatter(x, y, s=1)
+i = 9
+
+for f in images:
+    im = Image.open(f)
+
+    background.paste(im, (int(round(x[i])), 0))
+    
+    i = i-1
+
+background.save('stitching_attempt_1.tif')
