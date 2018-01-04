@@ -60,11 +60,11 @@ plt.scatter(x, y)
 ##Combination of .tif files
 
 #begin with a blank background to stitch each image to
-background = Image.new('I;16', (40000, 40000))
+background = Image.new('I;16', (36500, 36500))
 
 width, height = background.size
 
-x = (width-4000) - x #ensures images are mapped in correct order
+x = (width-4000) - x  #ensures images are mapped in correct order
 #the scan was captured (hence the image was saved) in the opposite order to that which PIL assigns coordinates
 
 #Produces a list of files starting with "AlSiC..." and ending in ".tif"
