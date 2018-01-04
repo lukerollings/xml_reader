@@ -60,7 +60,7 @@ plt.scatter(x, y)
 ##Combination of .tif files
 
 #begin with a blank background to stitch each image to
-background = Image.new('I;16', (36500, 36500))
+background = Image.new('I;16', (36000, 36000))
 
 width, height = background.size
 
