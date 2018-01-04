@@ -10,15 +10,16 @@ import numpy as np
 from PIL import Image
 import xml.etree.ElementTree as ET
 import glob
+import matplotlib.pyplot as plt
 
-os.chdir('C:\\Users\\mbgnwlr2\\Documents\\PhD_LabStuff\\Rad_Stitch_Practice')
+os.chdir('C:\\Users\\mbgnwlr2\\Documents\\PhD_LabStuff\\Radiography_17_12_20')
 
 ##Analysis of .xml files
 print('image', 'x axis position (mm)', 'y axis position (mm)', 'magnification (mm)', 'rotation (degrees)', 'tilt (degrees)', 'imaging (mm)') 
 
 #Produces a list of files starting with "AlSiC..." and ending in ".xml"
 filenames = sorted(glob.glob('AlSiC_monosheet_*.xml'))
-filenames = filenames[0:10]
+filenames = filenames[0:100]
 
 np.xpos = [] #list to add x coordinates
 np.ypos = [] #list to add y coordiantes
@@ -50,27 +51,36 @@ for f in filenames:
 #convert from mm to pixels (value measured in imageJ)
 px = 117.533 #(pixels/mm)
 
-#end with lists of x and y coordinates in units of pixels
 x = np.multiply(np.xpos, px)
 y = np.multiply(np.ypos, px) 
+
+plt.scatter(x, y)
 
 
 ##Combination of .tif files
 
 #begin with a blank background to stitch each image to
-background = Image.new('I;16', (40000, 4000))
+background = Image.new('I;16', (40000, 40000))
+
+width, height = background.size
+
+x = (width-4000) - x #ensures images are mapped in correct order
+#the scan was captured (hence the image was saved) in the opposite order to that which PIL assigns coordinates
 
 #Produces a list of files starting with "AlSiC..." and ending in ".tif"
 images = sorted(glob.glob('AlSiC_monosheet_*.tif'))
-images = images[0:10]
+images = images[0:100]
 
-ix = 9 #iteration counter for x axis
+ix = 0 #iteration counter for x axis
+iy = 0
 
+#reads each .tif file in turn and assigns it to the appropriate coordinates on background image
 for f in images:
     im = Image.open(f)
 
-    background.paste(im, (int(round(x[ix])), 0)) #lines image up with ix-th coordinate of list x
+    background.paste(im, (int(round(x[ix])), int(round(y[iy])))) #lines image up with ix-th coordinate of list x
     
-    ix = ix-1
+    ix = ix+1
+    iy = iy+1
 
-background.save('stitching_attempt_1.tif') #saves final image as "stitching_attempt_1
+background.save('stitching_attempt_1.tif') #saves final image as "stitching_attempt_1.tif"
